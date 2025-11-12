@@ -1,30 +1,32 @@
-// https://pub.dev/packages/sqflite#sql-helpers
 import 'package:my_todo_app/todo.dart';
 import 'package:rxdart/subjects.dart';
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 class TodoProvider {
   late Database db;
   final todos = BehaviorSubject<List<Todo>>();
 
   Future open(String path) async {
-    db = await openDatabase(
+    // Use sqflite_ffi's databaseFactory so that we can use the real sqflite on-device
+    // and an in-memory database in tests.
+    db = await databaseFactory.openDatabase(
       path,
-      version: 1,
-      onCreate: (Database db, int version) async {
-        await db.execute('''
+      options: OpenDatabaseOptions(
+        version: 1,
+        onCreate: (Database db, int version) async {
+          await db.execute('''
 create table $tableTodo ( 
   $columnId integer primary key autoincrement, 
   $columnTitle text not null,
   $columnDone integer not null)
 ''');
-      },
+        },
+      ),
     );
     // Populate todos.
     await updateList();
   }
 
-  // https://pub.dev/packages/sqflite#read-results
   Future updateList() async {
     final todoMaps = await db.query(tableTodo);
     final latestTodos = todoMaps.map(Todo.fromMap).toList();
