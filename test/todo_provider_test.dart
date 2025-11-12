@@ -11,16 +11,35 @@ main() {
   test('insert', () async {
     final p = TodoProvider();
     await p.open(inMemoryDatabasePath);
-    final todo = Todo()
-      ..id = null
-      ..title = 'Do something'
-      ..done = false;
 
     // Save a new todo with a null id.
-    final savedTodo = await p.insert(todo);
+    final savedTodo = await p.insert(makeTodo());
 
     // Check that the saved todo was assigned an id.
     expect(savedTodo.id, isNotNull);
     expect(savedTodo.title, 'Do something');
   });
+
+  test('getTodo', () async {
+    // Prepare the database.
+    final p = TodoProvider();
+    await p.open(inMemoryDatabasePath);
+    final savedTodo = await p.insert(makeTodo());
+    final id = savedTodo.id!;
+
+    // Read a todo.
+    final readTodo = await p.getTodo(id);
+
+    // Check its content.
+    expect(readTodo.id, id);
+    expect(readTodo.title, 'Do something');
+    expect(readTodo.done, isFalse);
+  });
+}
+
+Todo makeTodo() {
+  return Todo()
+    ..id = null
+    ..title = 'Do something'
+    ..done = false;
 }
