@@ -8,23 +8,30 @@ main() {
   sqfliteFfiInit();
   databaseFactory = databaseFactoryFfi;
 
-  test('insert', () async {
-    final p = TodoProvider();
-    await p.open(inMemoryDatabasePath);
+  late TodoProvider p;
 
+  setUp(() async {
+    // Open an in-memory database.
+    p = TodoProvider();
+    await p.open(inMemoryDatabasePath);
+  });
+
+  tearDown(() async {
+    // Close the database so that the next test can start from an empty one.
+    await p.close();
+  });
+
+  test('insert', () async {
     // Save a new todo with a null id.
     final savedTodo = await p.insert(makeTodo());
 
     // Check that the saved todo was assigned an id.
     expect(savedTodo.id, isNotNull);
     expect(savedTodo.title, 'Do something');
-    await p.close();
   });
 
   test('getTodo', () async {
     // Prepare the database.
-    final p = TodoProvider();
-    await p.open(inMemoryDatabasePath);
     final savedTodo = await p.insert(makeTodo());
     final id = savedTodo.id!;
 
@@ -35,14 +42,9 @@ main() {
     expect(readTodo.id, id);
     expect(readTodo.title, 'Do something');
     expect(readTodo.done, isFalse);
-    await p.close();
   });
 
   test('list', () async {
-    // Prepare the database.
-    final p = TodoProvider();
-    await p.open(inMemoryDatabasePath);
-
     // Since we don't know the ids in advance,  simply check Todos' titles.
     final titlesStream = p.list().map(
       (todos) => todos.map((todo) => todo.title).toList(),
@@ -61,7 +63,6 @@ main() {
     // At this point, titles has emitted ['Do something'];
     await p.insert(makeTodo());
     // At this point, titles has emitted ['Do something', 'Do something'];
-    await p.close();
   });
 }
 
