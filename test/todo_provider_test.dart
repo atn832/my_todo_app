@@ -62,6 +62,8 @@ main() {
     expect(updatedTodo.done, isTrue);
   });
 
+  // TODO: test delete
+
   test('list', () async {
     // Since we don't know the ids in advance,  simply check Todos' titles.
     final titlesStream = p.list().map(
@@ -73,14 +75,25 @@ main() {
         [],
         ['Do something'],
         ['Do something', 'Do something'],
+        ['Do something', 'Do something else'],
+        ['Do something else'],
       ]),
     );
 
     // In the beginning, titles is [].
-    await p.insert(makeTodo());
+    final firstTodo = await p.insert(makeTodo());
     // At this point, titles has emitted ['Do something'];
-    await p.insert(makeTodo());
+    final secondTodo = await p.insert(makeTodo());
     // At this point, titles has emitted ['Do something', 'Do something'];
+
+    // Modify the second todo.
+    secondTodo.title = 'Do something else';
+    await p.update(secondTodo);
+    // At this point, titles has emitted ['Do something', 'Do something else'];
+
+    // Delete the first todo.
+    await p.delete(firstTodo.id!);
+    // At this point, titles has emitted ['Do something else'];
   });
 }
 
