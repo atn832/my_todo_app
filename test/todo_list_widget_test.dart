@@ -9,7 +9,7 @@ import 'todo_provider_test.dart';
 main() {
   // Init ffi loader to use the in-memory database.
   sqfliteFfiInit();
-  // When using testWidgts, we have to use `databaseFactoryFfiNoIsolate`
+  // When using testWidgets, we have to use `databaseFactoryFfiNoIsolate`
   // instead of `databaseFactoryFfi`.
   // https://github.com/tekartik/sqflite/issues/841#issuecomment-1200859788
   databaseFactory = databaseFactoryFfiNoIsolate;

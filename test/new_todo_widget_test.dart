@@ -1,6 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_todo_app/main.dart';
-import 'package:my_todo_app/todo_list_widget.dart';
+import 'package:my_todo_app/new_todo_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
@@ -25,24 +25,23 @@ main() {
     await p.close();
   });
 
-  testWidgets('displays messages', (WidgetTester tester) async {
-    await tester.pumpWidget(MainApp(p));
+  testWidgets('NewTodoWidget', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: NewTodoWidget(p))),
+    );
     await tester.pump();
 
     await expectLater(
-      find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/main_app/empty.png'),
+      find.byType(NewTodoWidget),
+      matchesGoldenFile('goldens/new_todo_widget/initialRender.png'),
     );
-    expect(find.text('Write tests'), findsNothing);
+    expect(find.text('Create a todo'), findsOneWidget);
 
-    // Tap 'Create a todo'.
+    // Create a todo.
     await tester.tap(find.text('Create a todo'));
     await tester.pump();
 
-    await expectLater(
-      find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/main_app/oneTodo.png'),
-    );
-    expect(find.text('Write tests'), findsOneWidget);
+    // Expect the todo to have been created.
+    expect(p.list().map((todos) => todos.length), emits(1));
   });
 }

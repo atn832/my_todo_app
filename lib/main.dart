@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_todo_app/todo.dart';
+import 'package:my_todo_app/new_todo_widget.dart';
 import 'package:my_todo_app/todo_list_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
 
@@ -24,16 +24,7 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: Column(
           children: [
-            ElevatedButton(
-              onPressed: () async {
-                final todo = Todo()
-                  ..id = null
-                  ..title = 'Write tests'
-                  ..done = false;
-                await todoProvider.insert(todo);
-              },
-              child: Text('Create a todo'),
-            ),
+            NewTodoWidget(todoProvider),
             Expanded(child: TodoListWidget(todoProvider)),
           ],
         ),
