@@ -44,6 +44,24 @@ main() {
     expect(readTodo.done, isFalse);
   });
 
+  test('updateTodo', () async {
+    // Prepare the database.
+    final savedTodo = await p.insert(makeTodo());
+
+    // Change values.
+    savedTodo.title = 'Write tests';
+    savedTodo.done = true;
+    final updatedTodoId = await p.update(savedTodo);
+
+    // Read back.
+    final updatedTodo = await p.getTodo(updatedTodoId);
+
+    // Check its content.
+    expect(updatedTodo.id, updatedTodoId);
+    expect(updatedTodo.title, 'Write tests');
+    expect(updatedTodo.done, isTrue);
+  });
+
   test('list', () async {
     // Since we don't know the ids in advance,  simply check Todos' titles.
     final titlesStream = p.list().map(
