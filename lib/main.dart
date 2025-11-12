@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_todo_app/todo.dart';
+import 'package:my_todo_app/todo_list_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
 
 void main() {
@@ -30,15 +31,7 @@ class MainApp extends StatelessWidget {
               },
               child: Text('Create a todo'),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final todoProvider = TodoProvider();
-                await todoProvider.open('todos.db');
-                final todos = await todoProvider.list();
-                print(todos.map((todo) => todo.title).join('\n'));
-              },
-              child: Text('List todos'),
-            ),
+            Expanded(child: TodoListWidget()),
           ],
         ),
       ),
