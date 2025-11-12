@@ -33,15 +33,30 @@ main() {
 
     await expectLater(
       find.byType(NewTodoWidget),
-      matchesGoldenFile('goldens/new_todo_widget/initialRender.png'),
+      matchesGoldenFile('goldens/new_todo_widget/1_initialRender.png'),
     );
     expect(find.text('Create a todo'), findsOneWidget);
 
-    // Create a todo.
+    // Type some text.
+    await tester.enterText(find.byType(TextField), 'Book an appointment');
+    await tester.pump();
+
+    await expectLater(
+      find.byType(NewTodoWidget),
+      matchesGoldenFile('goldens/new_todo_widget/2_inputText.png'),
+    );
+
     await tester.tap(find.text('Create a todo'));
     await tester.pump();
 
     // Expect the todo to have been created.
-    expect(p.list().map((todos) => todos.length), emits(1));
+    expect(
+      p.list().map((todos) => todos.map((todo) => todo.title)),
+      emits(['Book an appointment']),
+    );
+    await expectLater(
+      find.byType(NewTodoWidget),
+      matchesGoldenFile('goldens/new_todo_widget/3_tappedButton.png'),
+    );
   });
 }
