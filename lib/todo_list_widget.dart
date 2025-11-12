@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_todo_app/todo.dart';
 import 'package:my_todo_app/todo_provider.dart';
 
 class TodoListWidget extends StatefulWidget {
@@ -12,21 +13,21 @@ class TodoListWidget extends StatefulWidget {
 
 class TodoListWidgetState extends State<TodoListWidget> {
   late final TodoProvider _provider;
-  late final Future<dynamic> _open;
 
   @override
   void initState() {
     _provider = TodoProvider();
-    _open = _provider.open('todos.db');
+    _provider.open('todos.db');
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _open.then((_) => _provider.list()),
+    return StreamBuilder<List<Todo>>(
+      stream: _provider.list(),
       builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
+        print(snapshot.data);
+        if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }
         final todos = snapshot.data;
