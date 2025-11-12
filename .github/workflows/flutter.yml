@@ -28,6 +28,7 @@ jobs:
         run: flutter analyze
 
       - name: Run tests
+        id: tests
         run: flutter test
         continue-on-error: true
 
@@ -36,3 +37,8 @@ jobs:
         with:
           name: test-failures
           path: /home/runner/work/my_todo_app/my_todo_app/test/failures/
+
+      - name: Check for any failures and fail the job if needed
+        if: always()
+        run: |
+          if [[ ${{ steps.tests.outcome }} == 'success' ]]; then exit 0; else exit 1; fi
