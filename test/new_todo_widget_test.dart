@@ -54,5 +54,9 @@ main() {
       p.list().map((todos) => todos.map((todo) => todo.title)),
       emits(['Book an appointment']),
     );
+    await expectLater(
+      find.byType(NewTodoWidget),
+      matchesGoldenFile('goldens/new_todo_widget/3_tappedButton.png'),
+    );
   });
 }
