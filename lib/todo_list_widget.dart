@@ -12,7 +12,6 @@ class TodoListWidget extends StatelessWidget {
     return StreamBuilder<List<Todo>>(
       stream: todoProvider.list(),
       builder: (context, snapshot) {
-        print(snapshot.data);
         if (snapshot.connectionState == ConnectionState.waiting) {
           return CircularProgressIndicator();
         }

@@ -45,10 +45,7 @@ class MainAppState extends State<MainApp> {
                       ..id = null
                       ..title = 'Write tests'
                       ..done = false;
-                    final savedTodo = await _todoProvider.insert(todo);
-                    print(savedTodo.id);
-                    final readTodo = await _todoProvider.getTodo(savedTodo.id!);
-                    print(readTodo.title);
+                    await _todoProvider.insert(todo);
                   },
                   child: Text('Create a todo'),
                 ),
