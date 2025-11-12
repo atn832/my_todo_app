@@ -20,6 +20,12 @@ create table $tableTodo (
     );
   }
 
+  // https://pub.dev/packages/sqflite#read-results
+  Future<List<Todo>> list() async {
+    final todoMaps = await db.query(tableTodo);
+    return todoMaps.map(Todo.fromMap).toList();
+  }
+
   Future<Todo> insert(Todo todo) async {
     todo.id = await db.insert(tableTodo, todo.toMap());
     return todo;

@@ -13,22 +13,33 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () async {
-              final todo = Todo()
-                ..id = null
-                ..title = 'Write tests'
-                ..done = false;
-              final todoProvider = TodoProvider();
-              await todoProvider.open('todos.db');
-              final savedTodo = await todoProvider.insert(todo);
-              print(savedTodo.id);
-              final readTodo = await todoProvider.getTodo(savedTodo.id!);
-              print(readTodo.title);
-            },
-            child: Text('Create a todo'),
-          ),
+        body: Column(
+          children: [
+            ElevatedButton(
+              onPressed: () async {
+                final todo = Todo()
+                  ..id = null
+                  ..title = 'Write tests'
+                  ..done = false;
+                final todoProvider = TodoProvider();
+                await todoProvider.open('todos.db');
+                final savedTodo = await todoProvider.insert(todo);
+                print(savedTodo.id);
+                final readTodo = await todoProvider.getTodo(savedTodo.id!);
+                print(readTodo.title);
+              },
+              child: Text('Create a todo'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                final todoProvider = TodoProvider();
+                await todoProvider.open('todos.db');
+                final todos = await todoProvider.list();
+                print(todos.map((todo) => todo.title).join('\n'));
+              },
+              child: Text('List todos'),
+            ),
+          ],
         ),
       ),
     );
