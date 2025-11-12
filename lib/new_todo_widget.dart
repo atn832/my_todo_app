@@ -28,6 +28,10 @@ class NewTodoWidgetState extends State<NewTodoWidget> {
               ..title = controller.text
               ..done = false;
             await widget.todoProvider.insert(todo);
+
+            setState(() {
+              controller.text = '';
+            });
           },
           child: Text('Create a todo'),
         ),

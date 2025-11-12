@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_todo_app/main.dart';
 import 'package:my_todo_app/todo_list_widget.dart';
@@ -25,7 +26,7 @@ main() {
     await p.close();
   });
 
-  testWidgets('displays messages', (WidgetTester tester) async {
+  testWidgets('MainApp', (WidgetTester tester) async {
     await tester.pumpWidget(MainApp(p));
     await tester.pump();
 
@@ -36,6 +37,7 @@ main() {
     expect(find.text('Write tests'), findsNothing);
 
     // Tap 'Create a todo'.
+    await tester.enterText(find.byType(TextField), 'Write tests');
     await tester.tap(find.text('Create a todo'));
     await tester.pump();
 
