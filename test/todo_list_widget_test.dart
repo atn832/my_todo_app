@@ -27,7 +27,7 @@ main() {
     await p.close();
   });
 
-  testWidgets('displays messages', (WidgetTester tester) async {
+  testWidgets('displays todos', (WidgetTester tester) async {
     await tester.pumpWidget(
       MaterialApp(home: Scaffold(body: TodoListWidget(p))),
     );
@@ -48,5 +48,31 @@ main() {
       matchesGoldenFile('goldens/todo_list_widget/oneTodo.png'),
     );
     expect(find.text('Do something'), findsOneWidget);
+  });
+
+  testWidgets('delete todo', (WidgetTester tester) async {
+    await p.insert(makeTodo());
+
+    // Render the list with one todo.
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: TodoListWidget(p))),
+    );
+    await tester.pump();
+
+    expect(find.text('Do something'), findsOneWidget);
+    await expectLater(
+      find.byType(TodoListWidget),
+      matchesGoldenFile('goldens/todo_list_widget/deleteBefore.png'),
+    );
+
+    // Tap 'delete'.
+    await tester.tap(find.byIcon(Icons.delete));
+    await tester.pump();
+
+    expect(find.text('Do something'), findsNothing);
+    await expectLater(
+      find.byType(TodoListWidget),
+      matchesGoldenFile('goldens/todo_list_widget/deleteAfter.png'),
+    );
   });
 }

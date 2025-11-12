@@ -29,6 +29,12 @@ class TodoListWidget extends StatelessWidget {
                 // TODO: set icon depending on todo.done.
                 Icons.check_box_outline_blank,
               ),
+              trailing: IconButton(
+                onPressed: () {
+                  todoProvider.delete(todo.id!);
+                },
+                icon: Icon(Icons.delete),
+              ),
             );
           },
         );
