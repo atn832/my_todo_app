@@ -39,7 +39,8 @@ main() {
     // Tap 'Create a todo'.
     await tester.enterText(find.byType(TextField), 'Write tests');
     await tester.tap(find.text('Create a todo'));
-    await tester.pump();
+    // Wait for the label to finish moving.
+    await tester.pumpAndSettle();
 
     await expectLater(
       find.byType(TodoListWidget),

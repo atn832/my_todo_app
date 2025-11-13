@@ -39,7 +39,8 @@ main() {
 
     // Type some text.
     await tester.enterText(find.byType(TextField), 'Book an appointment');
-    await tester.pump();
+    // Wait for the label to finish moving.
+    await tester.pumpAndSettle();
 
     await expectLater(
       find.byType(NewTodoWidget),
