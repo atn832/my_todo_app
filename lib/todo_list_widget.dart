@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:my_todo_app/todo.dart';
 import 'package:my_todo_app/todo_list_tile.dart';
 import 'package:my_todo_app/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 class TodoListWidget extends StatelessWidget {
-  const TodoListWidget(this.todoProvider, {super.key});
-
-  final TodoProvider todoProvider;
+  const TodoListWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final todoProvider = context.read<TodoProvider>();
     return StreamBuilder<List<Todo>>(
       stream: todoProvider.list(),
       builder: (context, snapshot) {
@@ -24,7 +24,7 @@ class TodoListWidget extends StatelessWidget {
           itemCount: todos.length,
           itemBuilder: (context, index) {
             final todo = todos[index];
-            return TodoListTile(todo: todo, todoProvider: todoProvider);
+            return TodoListTile(todo: todo);
           },
         );
       },

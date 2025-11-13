@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_todo_app/todo_list_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
+import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 import 'todo_provider_test.dart';
@@ -29,7 +30,14 @@ main() {
 
   testWidgets('displays todos', (WidgetTester tester) async {
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: TodoListWidget(p))),
+      MaterialApp(
+        home: Scaffold(
+          body: Provider<TodoProvider>(
+            create: (_) => p,
+            child: TodoListWidget(),
+          ),
+        ),
+      ),
     );
     await tester.pump();
 
@@ -55,7 +63,14 @@ main() {
 
     // Render the list with one todo.
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: TodoListWidget(p))),
+      MaterialApp(
+        home: Scaffold(
+          body: Provider<TodoProvider>(
+            create: (_) => p,
+            child: TodoListWidget(),
+          ),
+        ),
+      ),
     );
     await tester.pump();
 
@@ -81,7 +96,14 @@ main() {
 
     // Render the list with one todo.
     await tester.pumpWidget(
-      MaterialApp(home: Scaffold(body: TodoListWidget(p))),
+      MaterialApp(
+        home: Scaffold(
+          body: Provider<TodoProvider>(
+            create: (_) => p,
+            child: TodoListWidget(),
+          ),
+        ),
+      ),
     );
     await tester.pump();
 
