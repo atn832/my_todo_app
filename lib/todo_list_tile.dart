@@ -21,15 +21,22 @@ class TodoListTile extends StatefulWidget {
 class TodoListTileState extends State<TodoListTile> {
   @override
   Widget build(BuildContext context) {
+    final todo = widget.todo;
+    final todoProvider = widget.todoProvider;
     return ListTile(
-      title: Text(widget.todo.title),
-      leading: Icon(
-        // TODO: set icon depending on todo.done.
-        Icons.check_box_outline_blank,
+      title: Text(todo.title),
+      leading: Checkbox(
+        value: todo.done,
+        onChanged: (value) {
+          setState(() {
+            todo.done = value!;
+          });
+          todoProvider.update(todo);
+        },
       ),
       trailing: IconButton(
         onPressed: () {
-          widget.todoProvider.delete(widget.todo.id!);
+          todoProvider.delete(todo.id!);
         },
         icon: Icon(Icons.delete),
       ),
