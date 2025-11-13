@@ -8,7 +8,7 @@ import 'package:my_todo_app/todo_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:rxdart/rxdart.dart';
 
-import 'todo_provider_test.dart';
+import 'todo_provider_with_fake_test.dart';
 
 @GenerateNiceMocks([MockSpec<TodoProvider>()])
 import 'todo_list_widget_with_mock_test.mocks.dart';
