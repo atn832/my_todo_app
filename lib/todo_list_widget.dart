@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_todo_app/todo.dart';
+import 'package:my_todo_app/todo_list_tile.dart';
 import 'package:my_todo_app/todo_provider.dart';
 
 class TodoListWidget extends StatelessWidget {
@@ -23,19 +24,7 @@ class TodoListWidget extends StatelessWidget {
           itemCount: todos.length,
           itemBuilder: (context, index) {
             final todo = todos[index];
-            return ListTile(
-              title: Text(todo.title),
-              leading: Icon(
-                // TODO: set icon depending on todo.done.
-                Icons.check_box_outline_blank,
-              ),
-              trailing: IconButton(
-                onPressed: () {
-                  todoProvider.delete(todo.id!);
-                },
-                icon: Icon(Icons.delete),
-              ),
-            );
+            return TodoListTile(todo: todo, todoProvider: todoProvider);
           },
         );
       },
