@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
+import 'package:mockito/mockito.dart';
+import 'package:my_todo_app/todo.dart';
 import 'package:my_todo_app/todo_list_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:rxdart/rxdart.dart';
 
 import 'todo_provider_test.dart';
 
-main() {
-  // Init ffi loader to use the in-memory database.
-  sqfliteFfiInit();
-  // When using testWidgets, we have to use `databaseFactoryFfiNoIsolate`
-  // instead of `databaseFactoryFfi`.
-  // https://github.com/tekartik/sqflite/issues/841#issuecomment-1200859788
-  databaseFactory = databaseFactoryFfiNoIsolate;
+@GenerateNiceMocks([MockSpec<TodoProvider>()])
+import 'todo_list_widget_with_mock_test.mocks.dart';
 
-  late TodoProvider p;
+main() {
+  late MockTodoProvider p;
+  late BehaviorSubject<List<Todo>> todos;
 
   setUp(() async {
-    // Open an in-memory database.
-    p = TodoProvider();
-    await p.open(inMemoryDatabasePath);
-  });
-
-  tearDown(() async {
-    // Close the database so that the next test can start from an empty one.
-    await p.close();
+    // Set up a mock TodoProvider, whose list() we can control with `todos`.
+    p = MockTodoProvider();
+    // Start with an empty list of Todos.
+    todos = BehaviorSubject.seeded([]);
+    when(p.list()).thenAnswer((_) => todos.stream);
   });
 
   testWidgets('displays todos', (WidgetTester tester) async {
@@ -43,23 +40,23 @@ main() {
 
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget_with_fake2/empty.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_mock/empty.png'),
     );
     expect(find.text('Do something'), findsNothing);
 
     // Add a todo.
-    await p.insert(makeTodo());
+    todos.add([makeTodo(id: 1)]);
     await tester.pump();
 
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget_with_fake2/oneTodo.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_mock/oneTodo.png'),
     );
     expect(find.text('Do something'), findsOneWidget);
   });
 
   testWidgets('delete todo', (WidgetTester tester) async {
-    await p.insert(makeTodo());
+    todos.add([makeTodo(id: 1)]);
 
     // Render the list with one todo.
     await tester.pumpWidget(
@@ -77,22 +74,26 @@ main() {
     expect(find.text('Do something'), findsOneWidget);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget_with_fake2/deleteBefore.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_mock/deleteBefore.png'),
     );
 
     // Tap 'delete'.
     await tester.tap(find.byIcon(Icons.delete));
+    // Verify that delete() has been called.
+    verify(p.delete(1));
+    // Simulate the deletion.
+    todos.add([]);
     await tester.pump();
 
     expect(find.text('Do something'), findsNothing);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget_with_fake2/deleteAfter.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_mock/deleteAfter.png'),
     );
   });
 
   testWidgets('update todo', (WidgetTester tester) async {
-    await p.insert(makeTodo());
+    todos.add([makeTodo(id: 1)]);
 
     // Render the list with one todo.
     await tester.pumpWidget(
@@ -110,24 +111,28 @@ main() {
     expect(find.text('Do something'), findsOneWidget);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget_with_fake2/update1.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_mock/update1.png'),
     );
 
     // Check the box.
     await tester.tap(find.byType(Checkbox));
+    // Verify that update() has been called.
+    final verificationResult = verify(p.update(captureAny));
+    // Check that the passed Todo has been marked as done.
+    final capturedTodo = verificationResult.captured.first;
+    expect(capturedTodo.done, isTrue);
+    // Simulate the update.
+    final updatedTodo = makeTodo(id: 1);
+    updatedTodo.done = true;
+    todos.add([updatedTodo]);
+    // Wait for rendering to complete.
     await tester.pumpAndSettle();
 
     await expectLater(
       find.byType(TodoListWidget),
       matchesGoldenFile(
-        'goldens/todo_list_widget_with_fake2/update2_checkBox.png',
+        'goldens/todo_list_widget_with_mock/update2_checkBox.png',
       ),
-    );
-
-    // Check the database.
-    expect(
-      p.list().map((todos) => todos.map((todo) => todo.done)),
-      emits([true]),
     );
   });
 }
