@@ -25,3 +25,11 @@ flutter test --update-goldens
 ```
 dart run build_runner build
 ```
+
+## Deploying
+
+We set up a script that runs tests before compiling the app to Android, then pretending to deploy. If the tests fail, the script aborts immediately.
+
+```
+./deploy.sh
+```
