@@ -19,8 +19,14 @@ class NewTodoWidgetState extends State<NewTodoWidget> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      spacing: 16,
       children: [
-        Expanded(child: TextField(controller: controller)),
+        Expanded(
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(label: Text('Task')),
+          ),
+        ),
         ElevatedButton(
           onPressed: () async {
             final todo = Todo()
