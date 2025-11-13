@@ -43,7 +43,7 @@ main() {
 
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/empty.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_fake2/empty.png'),
     );
     expect(find.text('Do something'), findsNothing);
 
@@ -53,7 +53,7 @@ main() {
 
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/oneTodo.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_fake2/oneTodo.png'),
     );
     expect(find.text('Do something'), findsOneWidget);
   });
@@ -77,7 +77,7 @@ main() {
     expect(find.text('Do something'), findsOneWidget);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/deleteBefore.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_fake2/deleteBefore.png'),
     );
 
     // Tap 'delete'.
@@ -87,7 +87,7 @@ main() {
     expect(find.text('Do something'), findsNothing);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/deleteAfter.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_fake2/deleteAfter.png'),
     );
   });
 
@@ -110,7 +110,7 @@ main() {
     expect(find.text('Do something'), findsOneWidget);
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/update1.png'),
+      matchesGoldenFile('goldens/todo_list_widget_with_fake2/update1.png'),
     );
 
     // Check the box.
@@ -119,7 +119,9 @@ main() {
 
     await expectLater(
       find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/todo_list_widget/update2_checkBox.png'),
+      matchesGoldenFile(
+        'goldens/todo_list_widget_with_fake2/update2_checkBox.png',
+      ),
     );
 
     // Check the database.
