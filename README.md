@@ -15,3 +15,9 @@ flutter test
 ```
 flutter test --update-goldens
 ```
+
+### Update mocks
+
+```
+dart run build_runner build
+```

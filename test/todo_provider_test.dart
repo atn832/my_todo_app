@@ -97,9 +97,9 @@ main() {
   });
 }
 
-Todo makeTodo() {
+Todo makeTodo({int? id}) {
   return Todo()
-    ..id = null
+    ..id = id
     ..title = 'Do something'
     ..done = false;
 }
