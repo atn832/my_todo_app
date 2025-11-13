@@ -19,7 +19,7 @@ class NewTodoWidgetState extends State<NewTodoWidget> {
   Widget build(BuildContext context) {
     final todoProvider = context.read<TodoProvider>();
     return Row(
-      spacing: 16,
+      spacing: 14,
       children: [
         Expanded(
           child: TextField(
