@@ -75,4 +75,35 @@ main() {
       matchesGoldenFile('goldens/todo_list_widget/deleteAfter.png'),
     );
   });
+
+  testWidgets('update todo', (WidgetTester tester) async {
+    await p.insert(makeTodo());
+
+    // Render the list with one todo.
+    await tester.pumpWidget(
+      MaterialApp(home: Scaffold(body: TodoListWidget(p))),
+    );
+    await tester.pump();
+
+    expect(find.text('Do something'), findsOneWidget);
+    await expectLater(
+      find.byType(TodoListWidget),
+      matchesGoldenFile('goldens/todo_list_widget/update1.png'),
+    );
+
+    // Check the box.
+    await tester.tap(find.byType(Checkbox));
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(TodoListWidget),
+      matchesGoldenFile('goldens/todo_list_widget/update2_checkBox.png'),
+    );
+
+    // Check the database.
+    expect(
+      p.list().map((todos) => todos.map((todo) => todo.done)),
+      emits([true]),
+    );
+  });
 }
