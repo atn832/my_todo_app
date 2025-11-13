@@ -5,7 +5,7 @@ import 'package:my_todo_app/todo_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'todo_provider_test.dart';
+import 'todo_provider_with_fake_test.dart';
 
 main() {
   // Init ffi loader to use the in-memory database.
