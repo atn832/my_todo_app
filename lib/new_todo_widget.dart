@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:my_todo_app/todo.dart';
 import 'package:my_todo_app/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 class NewTodoWidget extends StatefulWidget {
-  const NewTodoWidget(this.todoProvider, {super.key});
-
-  final TodoProvider todoProvider;
+  const NewTodoWidget({super.key});
 
   @override
   State<StatefulWidget> createState() {
@@ -18,6 +17,7 @@ class NewTodoWidgetState extends State<NewTodoWidget> {
 
   @override
   Widget build(BuildContext context) {
+    final todoProvider = context.read<TodoProvider>();
     return Row(
       spacing: 16,
       children: [
@@ -33,7 +33,7 @@ class NewTodoWidgetState extends State<NewTodoWidget> {
               ..id = null
               ..title = controller.text
               ..done = false;
-            await widget.todoProvider.insert(todo);
+            await todoProvider.insert(todo);
             setState(() {
               controller.text = '';
             });

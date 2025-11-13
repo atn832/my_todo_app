@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_todo_app/new_todo_widget.dart';
 import 'package:my_todo_app/todo_list_widget.dart';
 import 'package:my_todo_app/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   // This line is necessary to properly initialize the sqflite database.
@@ -23,14 +24,17 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: Text('Todo App')),
-        body: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: NewTodoWidget(todoProvider),
-            ),
-            Expanded(child: TodoListWidget(todoProvider)),
-          ],
+        body: Provider(
+          create: (_) => todoProvider,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: NewTodoWidget(),
+              ),
+              Expanded(child: TodoListWidget()),
+            ],
+          ),
         ),
       ),
     );

@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:my_todo_app/todo.dart';
 import 'package:my_todo_app/todo_provider.dart';
+import 'package:provider/provider.dart';
 
 class TodoListTile extends StatefulWidget {
   final Todo todo;
-  final TodoProvider todoProvider;
 
-  const TodoListTile({
-    super.key,
-    required this.todo,
-    required this.todoProvider,
-  });
+  const TodoListTile({super.key, required this.todo});
 
   @override
   State<StatefulWidget> createState() {
@@ -21,8 +17,8 @@ class TodoListTile extends StatefulWidget {
 class TodoListTileState extends State<TodoListTile> {
   @override
   Widget build(BuildContext context) {
+    final todoProvider = context.read<TodoProvider>();
     final todo = widget.todo;
-    final todoProvider = widget.todoProvider;
     return ListTile(
       title: Text(todo.title),
       leading: Checkbox(
