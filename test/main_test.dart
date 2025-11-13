@@ -27,6 +27,10 @@ main() {
   });
 
   testWidgets('MainApp', (WidgetTester tester) async {
+    // Set a phone-like screen size.
+    tester.view.physicalSize = const Size(1000, 2000);
+
+    // Render the app.
     await tester.pumpWidget(MainApp(p));
     await tester.pump();
 
@@ -36,7 +40,7 @@ main() {
     );
     expect(find.text('Write tests'), findsNothing);
 
-    // Tap 'Create a todo'.
+    // Create a todo.
     await tester.enterText(find.byType(TextField), 'Write tests');
     await tester.tap(find.text('Create a todo'));
     // Wait for the label to finish moving.
