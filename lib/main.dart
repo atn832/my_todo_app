@@ -23,14 +23,14 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: Text('Todo App')),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              NewTodoWidget(todoProvider),
-              Expanded(child: TodoListWidget(todoProvider)),
-            ],
-          ),
+        body: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: NewTodoWidget(todoProvider),
+            ),
+            Expanded(child: TodoListWidget(todoProvider)),
+          ],
         ),
       ),
     );
