@@ -4,7 +4,7 @@
 
 A Todo app in Flutter to demonstrate test driven development.
 
-![Screenshot](test/goldens/main_app/oneTodo.png)
+![Screenshot](test/goldens/main_app/phone/light/twoTodos.png)
 
 ## Tests
 
