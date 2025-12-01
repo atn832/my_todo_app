@@ -51,5 +51,19 @@ main() {
       matchesGoldenFile('goldens/main_app/oneTodo.png'),
     );
     expect(find.text('Write tests'), findsOneWidget);
+
+    // Create a todo.
+    await tester.enterText(
+      find.byType(TextField),
+      'Grocery shopping: eggs, milk, bread, baked beans, tomatoes',
+    );
+    await tester.tap(find.text('Create a todo'));
+    // Wait for the label to finish moving.
+    await tester.pumpAndSettle();
+
+    await expectLater(
+      find.byType(TodoListWidget),
+      matchesGoldenFile('goldens/main_app/twoTodos.png'),
+    );
   });
 }
