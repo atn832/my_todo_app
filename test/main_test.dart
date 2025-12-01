@@ -31,7 +31,7 @@ main() {
     tester.view.physicalSize = const Size(1000, 2000);
 
     // Render the app.
-    await tester.pumpWidget(MainApp(p));
+    await tester.pumpWidget(MainApp(p, themeMode: ThemeMode.dark));
     await tester.pump();
 
     await expectLater(

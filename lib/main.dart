@@ -15,13 +15,20 @@ void main() async {
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp(this.todoProvider, {super.key});
+  const MainApp(
+    this.todoProvider, {
+    super.key,
+    this.themeMode = ThemeMode.system,
+  });
 
   final TodoProvider todoProvider;
+  final ThemeMode themeMode;
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      themeMode: themeMode,
+      darkTheme: ThemeData.dark(),
       home: Scaffold(
         appBar: AppBar(title: Text('Todo App')),
         body: Provider(
