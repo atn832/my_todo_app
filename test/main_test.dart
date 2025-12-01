@@ -26,44 +26,52 @@ main() {
     await p.close();
   });
 
-  testWidgets('MainApp', (WidgetTester tester) async {
-    // Set a phone-like screen size.
-    tester.view.physicalSize = const Size(1000, 2000);
+  const phoneSize = Size(1000, 2000);
+  const tabletSize = Size(2000, 2400);
+  for (final (device, size, mode) in [
+    ('phone', phoneSize, ThemeMode.dark),
+    ('phone', phoneSize, ThemeMode.light),
+    ('tablet', tabletSize, ThemeMode.dark),
+    ('tablet', tabletSize, ThemeMode.light),
+  ]) {
+    testWidgets('MainApp-$device-${mode.name}', (WidgetTester tester) async {
+      tester.view.physicalSize = size;
 
-    // Render the app.
-    await tester.pumpWidget(MainApp(p, themeMode: ThemeMode.dark));
-    await tester.pump();
+      // Render the app.
+      await tester.pumpWidget(MainApp(p, themeMode: mode));
+      await tester.pump();
 
-    await expectLater(
-      find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/main_app/empty.png'),
-    );
-    expect(find.text('Write tests'), findsNothing);
+      await expectLater(
+        find.byType(TodoListWidget),
+        matchesGoldenFile('goldens/main_app/$device/${mode.name}/empty.png'),
+      );
+      expect(find.text('Write tests'), findsNothing);
 
-    // Create a todo.
-    await tester.enterText(find.byType(TextField), 'Write tests');
-    await tester.tap(find.text('Create a todo'));
-    // Wait for the label to finish moving.
-    await tester.pumpAndSettle();
+      // Create a todo.
+      await tester.enterText(find.byType(TextField), 'Write tests');
+      await tester.tap(find.text('Create a todo'));
+      // Wait for the label to finish moving.
+      await tester.pumpAndSettle();
 
-    await expectLater(
-      find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/main_app/oneTodo.png'),
-    );
-    expect(find.text('Write tests'), findsOneWidget);
+      await expectLater(
+        find.byType(TodoListWidget),
+        matchesGoldenFile('goldens/main_app/$device/${mode.name}/oneTodo.png'),
+      );
+      expect(find.text('Write tests'), findsOneWidget);
 
-    // Create a todo.
-    await tester.enterText(
-      find.byType(TextField),
-      'Grocery shopping: eggs, milk, bread, baked beans, tomatoes',
-    );
-    await tester.tap(find.text('Create a todo'));
-    // Wait for the label to finish moving.
-    await tester.pumpAndSettle();
+      // Create a todo.
+      await tester.enterText(
+        find.byType(TextField),
+        'Grocery shopping: eggs, milk, bread, baked beans, tomatoes',
+      );
+      await tester.tap(find.text('Create a todo'));
+      // Wait for the label to finish moving.
+      await tester.pumpAndSettle();
 
-    await expectLater(
-      find.byType(TodoListWidget),
-      matchesGoldenFile('goldens/main_app/twoTodos.png'),
-    );
-  });
+      await expectLater(
+        find.byType(TodoListWidget),
+        matchesGoldenFile('goldens/main_app/$device/${mode.name}/twoTodos.png'),
+      );
+    });
+  }
 }
